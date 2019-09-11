@@ -1,6 +1,8 @@
+//requires for sql and inquirer
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 
+//using the mysql create connection constructor, we are creating the required connection to the bamazon host.
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -8,6 +10,7 @@ var connection = mysql.createConnection({
     database: 'bamazon'
 });
 
+//start bamazon manager allows the manager to select modes to manage the database. the first variable is an array to select from the inquirer prompt
 function startBamazonManager() {
     var managerModes = [
         { name: "Exit Manager Mode", value: 0 },
@@ -18,6 +21,7 @@ function startBamazonManager() {
     ];
     console.log("");
     console.log("*********************************************");
+    //prompot to select the manager mode. the switch statement allows for the execution of the various functions that control the sql database.
     inquirer.prompt([{
         type: 'list',
         name: 'managerAction',
@@ -44,6 +48,7 @@ function startBamazonManager() {
     })
 };
 
+//this queries the sql database and displays all of the products in bamazon along with their price, department, and stock quantity
 function viewProducts(){
     connection.query("SELECT * FROM products",function(err,response){
         if(err) throw err;
@@ -57,6 +62,7 @@ function viewProducts(){
     })
 };
 
+//displays the products that are low on inventory.
 function viewLowInventory(){
     connection.query("SELECT * FROM bamazon.products WHERE stock_quantity<5",function(err,response){
         if(err) throw err;
@@ -70,12 +76,14 @@ function viewLowInventory(){
     })
 };
 
+//adds inventory for a particular product. 
 function addToInventory(){
     connection.query("SELECT * FROM products",function(err,response){
         if(err) throw err;
         var productArray=[];
         console.log("*********************************************");
         console.log("View products below...");
+        //this creates an array to select from for the inquirer prompt. the value that will be passed will be the item id.
         for (let i=0; i<response.length;i++){
             productArray.push({
                 name: `Item ID: ${response[i].item_id}    ||Product Name: ${response[i].product_name} ||Department: ${response[i].department} ||Price ${response[i].price}    ||Stock Quantity: ${response[i].stock_quantity}`,
@@ -95,6 +103,7 @@ function addToInventory(){
                 message:'How much would you like to add?'
             }
         ]).then(function(answer){
+            //after the user has answered how much htey want to add, the value is verified. if NaN, then we go back and start again. if valid, we add to the quantity in the database.
             if(!isNaN(answer.quantity)){
                 var quantityToAdd=answer.quantity;
                 connection.query('SELECT products.stock_quantity FROM products WHERE ?',{item_id:answer.item_id},function(err,res){
@@ -118,6 +127,7 @@ function addToInventory(){
     })
 };
 
+//adds products to the sql database. if the price is not a number we make the user reenter it. since stock can be updated, we allow for that to be 0
 function addProduct(){
     inquirer.prompt([
         {
@@ -163,7 +173,7 @@ function addProduct(){
 };
 
 
-
+//create the connection and start bamazon manager
 connection.connect(function (err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
