@@ -36,7 +36,7 @@ function startBamazon() {
             }
         ]).then(function (response) {
             if (response.item_id > 0) {
-                if (typeof (response.quantity) === 'number') {
+                if (!isNaN(response.quantity)) {
                     if (response.quantity > 0) {
                         buySomething(response);
                     }
@@ -65,7 +65,7 @@ function buySomething(productObject) {
         console.log("*********************************************");
         console.log(`You want to purchase ${customerQuantity} units of ${res[0].product_name} at ${res[0].price} per unit.`);
         if (customerQuantity <= res[0].stock_quantity) {
-            cost = res[0].price * customerQuantity;
+            cost = Math.floor(res[0].price * customerQuantity*100)/100;
             connection.query('UPDATE products SET ? WHERE ?', [
                 { stock_quantity: res[0].stock_quantity - customerQuantity },
                 { item_id: productObject.item_id }
