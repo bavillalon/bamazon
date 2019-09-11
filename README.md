@@ -11,4 +11,5 @@ in the Manager view, the manager is allowed to view the stock, the view the low 
 below is a video of the applicaiton working as well as the git hub repository.
 
 Github repository: https://github.com/bavillalon/bamazon
-Video of it working: 
+Video of it working: https://drive.google.com/file/d/1hkT8KvaSgUHc1TLzWhS78ESgTDO1IhbU/view?usp=sharing
+
