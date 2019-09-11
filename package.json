@@ -1,7 +1,7 @@
 {
   "name": "bamazon",
   "version": "1.0.0",
-  "description": "",
+  "description": "The Bamazon project is a store. the inventory for this store is tracked by a SQL database that holds each product name, the department it belongs to, the price, and the quantity of each product and assigns it a unique identifier.",
   "main": "bamazonCustomer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
